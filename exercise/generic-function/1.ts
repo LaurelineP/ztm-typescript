@@ -14,3 +14,10 @@
 import { strict as assert } from "assert";
 
 const numbers: number[] = [1, 2, 3, 4, 5];
+
+const searchIndexOfNumber = (n: number, arrNumber: number[] = numbers): number | undefined => 
+	arrNumber.includes(n) ? arrNumber.indexOf(n) : undefined;
+
+assert.equal(searchIndexOfNumber(3), 2);
+assert.equal(searchIndexOfNumber(6), undefined);
+

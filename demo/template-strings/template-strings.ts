@@ -6,3 +6,8 @@ import { strict as assert } from "assert";
 //
 // Useful links:
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals
+
+const lastName = "Smith";
+const firstName = "John";
+const fullName = `${firstName} ${lastName}`;
+assert.equal(fullName, 'John Smith');

@@ -13,4 +13,20 @@
 import { strict as assert } from "assert";
 
 const scores = [90, 77, 83, 96, 76, 88];
+let total = 0;
+
+for( let i = 0; i < scores.length; i++){
+	total += scores[i];
+}
+
+total = total / scores.length;
+assert.equal(total, 85);
+
+scores.push(92);
+total = 0;
+for( let i = 0; i < scores.length; i++){
+	total += scores[i];
+}
+total = total / scores.length;
+assert.equal(total, 86);
 

@@ -10,3 +10,16 @@
 
 import { strict as assert } from "assert";
 
+
+const getAlternativeTemperature = (value: string): string => {
+	// console.log('value.split(/d/):', value.split(/\W/))
+	const [ nString, type ] = value.split(/\W/);
+	const n = Number(nString);
+
+	return type.toLocaleLowerCase().includes('c')
+		? `${(n * 1.8) + 32}°F`
+		: `${(n - 32) / 1.8}°C`
+}
+
+assert.equal(getAlternativeTemperature('25°C'), '77°F');
+assert.equal(getAlternativeTemperature('68°F'), '20°C');

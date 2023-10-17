@@ -20,3 +20,57 @@
 //
 // Useful links:
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining
+
+
+// PII: Personal Identify Information
+interface PII {
+	age?: number;
+}
+
+interface SearchResultI {
+	name: string;
+	PII?: PII
+}
+
+class Database {
+	search(name: string): SearchResultI | undefined {
+		switch( name ){
+			case 'John':
+				return {
+					name: 'John Does',
+					PII: { age: 22 }
+				}
+			case 'Jane':
+				return {
+					name: 'Jane Explora'
+				}
+			default: return;
+		}
+	}
+}
+
+const database = new Database();
+const resultJohn = database.search('John');
+const resultJane = database.search('Jane');
+
+const results = [ resultJohn, resultJane ];
+results.forEach( result => {
+
+	const conditionWithoutOptionalChaining = (
+		result !== undefined
+		&& result !== null
+		&& result.PII !== undefined
+		&& result.PII !== null
+		&& result.PII.age !== undefined
+		&& result.PII.age !== null
+	)
+
+	// optional chain: automatically checks for undefined || null
+	const conditionWithOptionalChaining = (
+		!!result && !!result?.PII?.age
+	)
+
+	if( conditionWithOptionalChaining ){
+		console.table({ ...result });
+	}
+})

@@ -7,3 +7,10 @@
 //
 // Useful links:
 // https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#union-types
+
+// Union type : a type having limited value possibilities
+type Color = "red" | "green" | "blue";
+
+
+const colorOK: Color = 'red';
+// const colorNOK: Color = 'yellow';

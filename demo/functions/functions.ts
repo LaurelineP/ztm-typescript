@@ -12,3 +12,26 @@ import { strict as assert } from "assert";
 //
 // Useful links:
 // https://www.typescriptlang.org/docs/handbook/2/functions.html
+
+
+// function definition
+function sayHello(){
+	console.log('hello');
+}
+sayHello();
+
+// function expression
+const expressGreetings = function () { console.log('greetings!')}
+expressGreetings();
+
+
+// function expression (arrow function)
+const expressHi = () => console.log('hi');
+expressHi();
+
+
+function count ( n1, n2){
+	return n1 + n2;
+}
+const result = count(5,5);
+assert.equal(result, 10)

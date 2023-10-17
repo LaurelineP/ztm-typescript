@@ -14,3 +14,11 @@
 import { strict as assert } from "assert";
 
 const numbers: number[] = [1, 2, 3, 4, 5];
+let result = NaN;
+const sum = (arr: number[]): number => arr.reduce((acc, val): number => acc + val, 0);
+
+result = sum(numbers)
+assert.equal( sum(numbers), 15);
+
+result = result / numbers.length;
+assert.equal(result, 3);

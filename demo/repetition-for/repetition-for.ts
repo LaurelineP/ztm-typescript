@@ -16,3 +16,10 @@
 //
 // Useful links:
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for
+
+
+const arr = ['first', 'second', 'third'];
+
+for ( let i = 0; i < arr.length; i++){
+	console.log(arr[i])
+}

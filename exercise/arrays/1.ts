@@ -50,6 +50,43 @@
 
 import { strict as assert } from "assert";
 
-const ranking = [3, 4, 1, 2];
+// const ranking = [3, 4, 1, 2];
+const ranking = [3, 8, 7, 2];
 const teams = ["red", "blue", "green", "yellow"];
 
+
+console.group('AT FIRST -------')
+console.table({ ranking });
+console.table({ teams });
+console.groupEnd()
+
+const sort = (): void  => {
+	// loops over ranking - order ref to sort for both rankings and teams
+	for ( let i = 0; i < ranking.length; i++ ){
+		for ( let j = i + 1; j < ranking.length; j++ ){
+			if( ranking[i] > ranking[j]){
+	
+				// store value before re-assignments
+				const rank = { curr: ranking[i], next: ranking[j]}
+				const team = { curr: teams[i], next: teams[j]}
+	
+				// swap values in ranking array
+				ranking[i] = rank.next
+				ranking[j] = rank.curr;
+	
+				// swap values in teams array
+				teams[i] = team.next
+				teams[j] = team.curr;
+			}
+		}
+	}
+}
+
+sort()
+console.group('AT LAST -------')
+console.table({ ranking });
+console.table({ teams });
+console.groupEnd()
+
+assert.equal( Math.min(...ranking), ranking[0] )
+assert.equal( Math.max(...ranking), ranking[ranking.length - 1] )

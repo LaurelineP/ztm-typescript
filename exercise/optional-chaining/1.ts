@@ -23,3 +23,14 @@ const box: Product = {
   name: "Box"
 };
 
+const getPrice = (product: Product): string => {
+  let result = 'not for sale';
+  if( product.price?.amount  !== undefined ){
+    result = `${ product.price.amount} ${product.price.currency}`
+  }
+  return result;
+}
+
+console.log('phone price', getPrice(phone) )
+console.log('box price', getPrice(box) )
+

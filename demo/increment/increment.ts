@@ -7,3 +7,12 @@ import { strict as assert } from "assert";
 
 // Useful links:
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Increment
+let n = 1;
+
+// postfix increment
+n++;
+assert.equal(n, 2);
+
+// prefix increment
+++n;
+assert.equal(n, 3);

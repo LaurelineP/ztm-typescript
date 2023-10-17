@@ -10,3 +10,14 @@ import { strict as assert } from "assert";
 //
 // Useful links:
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
+type Names = string[];
+const names: Names = ["Smith", "Doe"];
+assert.equal(names.every( s => typeof s === 'string'), true );
+
+type PersonT = {
+	name: string,
+	age: number
+}
+
+const Person = (name: string, age: number): PersonT => ({ name, age });
+const persons: PersonT[] = [{ name: 'Ju', age: 9}]

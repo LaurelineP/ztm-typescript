@@ -6,3 +6,31 @@ import { strict as assert } from "assert";
 // values to make deductions or draw conclusions. Boolean logic is used to
 // express conditions and make decisions based on the truth or falsehood of
 // these conditions.
+const yes = true;
+const no = false;
+
+const age = 18;
+
+const canPurchase = age >= 18;
+assert.equal(canPurchase, true);
+// assert.equal(canPurchase, false); // will raise an error in terminal
+
+const denyPurchase = age < 18;
+assert.equal(denyPurchase, false);
+// assert.equal(denyPurchase, true);  // will raise an error in terminal
+
+
+// const favoriteColor = 'yellow';
+// const isFavorite = favoriteColor === 'red';
+// assert.equal(isFavorite, false)
+/**
+ * TS: will lint the above because const variable cannot be overlapped ( = overridden )
+ * This comparison appears to be unintentional because the types '"yellow"' and '"red"' have no overlap.
+ * 
+ */
+
+const two = 2;
+const isThree = (1 + two) === 3;
+assert.equal(isThree, true);
+// assert.equal(isThree, false);  // will raise an error in terminal
+

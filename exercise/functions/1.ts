@@ -9,3 +9,12 @@
 
 import { strict as assert } from "assert";
 
+const getFirstName = (): string  => 'Lowla';
+
+const getLastName = (): string  => 'Palooza';
+
+const genFullName = (): string => `${getFirstName()} ${getLastName()}`;
+
+console.log(genFullName());
+
+assert.equal(genFullName(), 'Lowla Palooza');

@@ -12,3 +12,66 @@ import { strict as assert } from "assert";
 //
 // Useful links:
 // https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates
+
+
+/** 
+ * Type Predicate : allow to check the type based on a type
+ *   - type guard, using "typeof" can only check for primitive values
+ *     and not our own custom type(s)
+ *   - type predicate, checking interfaces value, can check for both primitive 
+ *     and our own custom type(s)
+*/
+
+
+//  type gard: function that checks what type of data it is provided
+type StrOrNum = string | number;
+function isStringOrNumber( value: StrOrNum ){
+	return (
+		 typeof value === 'string' ||
+		 typeof value === 'number'
+	);
+}
+
+//  type predicated : definition of the type 
+type SquareT = "square";
+type CircleT = "circle";
+
+interface ShapeI {
+	kind: SquareT | CircleT
+	size: number
+}
+
+const isSquare = ( shape: ShapeI ) => {
+	return shape.kind === "square";
+}
+
+// course implementation 
+
+interface CircleI {
+	kind: CircleT,
+	size: number,
+}
+
+interface SquareI {
+	kind: SquareT,
+	size: number,
+}
+
+function isCircle( shape: ShapeI ): shape is CircleI {
+	return shape.kind === 'circle'
+}
+
+function calculateArea( shape: ShapeI ): number {
+	if( isSquare( shape )){
+		return shape.size ** 2;
+	}
+	if ( isCircle( shape )){
+		return Math.PI * shape.size ** 2;
+	}
+	throw new Error ( 'unknown shape ')
+}
+
+const circleRadius = calculateArea({ kind: 'circle', size: 20 });
+console.log('circleRadius:', circleRadius)
+const squareSize = calculateArea({ kind: 'square', size: 20 });
+console.log('squareSize:', squareSize)

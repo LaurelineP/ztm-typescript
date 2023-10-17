@@ -9,3 +9,32 @@ import { strict as assert } from "assert";
 //
 // Useful links:
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/if...else
+
+
+let result = 2 + 2;
+assert.equal(result, 4);
+
+function describeValueOddOrEven(n: number): string{
+	let value;
+	if( n % 2 === 0 ){
+		value = 'even';
+	} else if ( n % 2 > 0){
+		value = 'odd';
+	} else {
+		value = 'there is something wrong';
+	}
+	return value;
+}
+
+// init check;
+let value = describeValueOddOrEven(result)
+assert.equal(value, 'even');
+
+result = 5 + 2;
+value = describeValueOddOrEven(result)
+assert.equal(value, 'odd');
+
+// @ts-ignore
+result = 'hi';
+value = describeValueOddOrEven(result)
+assert.equal(value, 'there is something wrong');

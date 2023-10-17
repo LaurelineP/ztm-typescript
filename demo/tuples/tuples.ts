@@ -10,3 +10,11 @@ import { strict as assert } from "assert";
 //
 // Useful links:
 // https://www.typescriptlang.org/docs/handbook/2/objects.html#tuple-types
+type Title = string;
+type Author = string;
+type PublishYear = number;
+type Book = [Title, Author, PublishYear];
+
+const book : Book = ['Permanent Record', 'E. J. Snowden', 2019];
+assert.equal(Array.isArray(book), true);
+assert.equal(book.length, 3);

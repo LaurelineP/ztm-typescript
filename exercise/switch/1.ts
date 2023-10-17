@@ -17,3 +17,18 @@ import { strict as assert } from "assert";
 
 const weightClass = parseInt("3");
 
+switch (weightClass){
+	case 1:
+	case 2:
+	case 3:
+		console.log('is light weight class');
+		break;
+	case 4:
+	case 5:
+	case 6:
+		console.log('is medium weight class');
+		break;
+	default:
+		console.log('is heavy weigh class');
+		break;
+}

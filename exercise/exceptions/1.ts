@@ -12,3 +12,29 @@
 
 import { strict as assert } from "assert";
 
+interface LimitedInputI {
+	lengthLimit: number,
+	value: string,
+	error?: string
+}
+
+class LimitedInput implements LimitedInputI {
+	lengthLimit = 9;
+	value = '';
+	error = ''
+	constructor(value){
+		try {
+			if(value.length > this.lengthLimit){
+				this.error = `[ Error ]: value's length must be inferior or equal to ${this.lengthLimit} `;
+				throw new Error(this.error)
+			}
+			this.value = value;
+		} catch( error ){ console.error(error) }
+		}
+}
+
+
+const successCase = new LimitedInput('hello');
+console.log('successCase:', successCase)
+const failingCase = new LimitedInput('Let\'s dig into this problem');
+console.log('failingCase:', failingCase);

@@ -34,3 +34,44 @@
 //    line
 
 import { strict as assert } from "assert";
+const STANDARD 	= "Standard";
+const PREMIUM 	= "Premium";
+const MEMBER 	= "Member";
+const VIP 		= "VIP";
+
+type PriorityAccessValue = string;
+
+const  priorityAccess = {
+	Standard: "no priority access",
+	Premium: "can access the priority line only on weekdays",
+	Member: "can access the priority line on weekends and weekdays",
+	VIP: "can access the priority line at any time"
+}
+
+interface Ticket {
+	kind: PriorityAccessValue
+	rule: string 
+}
+
+class StandardTicket implements Ticket {
+	kind = STANDARD
+	rule = priorityAccess[ STANDARD ]
+}
+
+class PremiumTicket implements Ticket {
+	kind = PREMIUM
+	rule = priorityAccess[ PREMIUM ]
+}
+
+class MemberTicket implements Ticket {
+	kind = MEMBER
+	rule = priorityAccess[ MEMBER ]
+}
+
+
+class VIPTicket implements Ticket {
+	kind = VIP
+	rule = priorityAccess[ VIP ]
+}
+const standardTicket = new StandardTicket();
+assert.equal(standardTicket.kind, STANDARD );

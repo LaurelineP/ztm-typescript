@@ -9,3 +9,38 @@
 // Useful links:
 // https://www.typescriptlang.org/docs/handbook/2/objects.html#optional-properties
 
+type Warranty = 'standard' | 'extended';
+
+function getWarrantyInfo( warranty: Warranty){
+	switch (warranty){
+		case "standard": return "90 days warranty";
+		case "extended": return "180 days extended warranty";
+	}
+
+}
+
+interface LineItem {
+	name: string;
+	quantity: number;
+	// undefined if not present
+	warranty?: Warranty | null;
+}
+
+function printLine( {name, quantity, warranty = null }: LineItem):void{
+	console.table({  name, quantity, warranty: warranty ? getWarrantyInfo(warranty) : 'None'});
+}
+
+const product1: LineItem = {
+	name: "heater",
+	quantity: 1,
+	warranty: 'standard'
+}
+
+const product2: LineItem = {
+	name: "bread",
+	quantity: 1,
+}
+
+
+printLine( product1 );
+printLine( product2 );

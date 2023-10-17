@@ -9,3 +9,9 @@ import { strict as assert } from "assert";
 //
 // Useful links:
 // https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-aliases
+
+type FullName = string;
+
+const personName: FullName = 'John Smith';
+
+

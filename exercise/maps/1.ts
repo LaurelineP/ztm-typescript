@@ -30,7 +30,7 @@ interface Employee {
   name: EmployeeName;
 }
 
-const employees = [
+const employees: Employee[] = [
   { id: 1, name: "Alexander" },
   { id: 2, name: "Amelia" },
   { id: 3, name: "Ava" },
@@ -52,4 +52,21 @@ const employees = [
   { id: 19, name: "Sophia" },
   { id: 20, name: "William" },
 ];
+type EmployeeMap = Map<EmployeeId, EmployeeName>
+interface EmployeeDatabaseI {
+  employees: EmployeeMap
+  checkHasEmployeeId: (employeeId: EmployeeId) => boolean
+}
 
+const employeesMap: EmployeeMap = new Map();
+employees.forEach( employee => {
+  employeesMap.set(employee.id, employee.name);
+})
+ 
+class EmployeeDatabase implements EmployeeDatabaseI {
+  employees: EmployeeMap = employeesMap;
+  checkHasEmployeeId = (employeeId: number): boolean => this.employees.has(employeeId);
+}
+
+const employeeDatabase = new EmployeeDatabase();
+console.log('employeeDatabase:', employeeDatabase);
