@@ -60,7 +60,9 @@
     "exec-ex-interfaces": "npm exec ts-node exercise/interfaces/1.ts",
     "exec-ex-iterators": "npm exec ts-node exercise/iterators/1.ts",
     "exec-ex-exceptions": "npm exec ts-node exercise/exceptions/1.ts",
-    "exec-ex-optional-chaining": "npm exec ts-node exercise/optional-chaining/1.ts"
+    "exec-ex-optional-chaining": "npm exec ts-node exercise/optional-chaining/1.ts",
+    "exec-ex-async-await": "npm exec ts-node exercise/async-await/1.ts",
+    "exec-demo-testing": "pnpm test demo/testing/strings.test.ts"
   },
   "devDependencies": {
     "@tsconfig/strictest": "^1.0.2",

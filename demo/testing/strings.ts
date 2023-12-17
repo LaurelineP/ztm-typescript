@@ -30,7 +30,7 @@ export function slowString() {
   });
 }
 
-// An asynchronus function that fails.
+// An asynchronous function that fails.
 export function failedString() {
   return new Promise((resolve, reject) => {
     setTimeout(() => {

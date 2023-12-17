@@ -39,3 +39,16 @@ and then run with
 ## Generate docs
 
 cd demo/ANY_DIR && npx typedoc DEMO_FILE.ts
+
+
+<hr>
+
+## Weather App using HTTP protocol
+`./app`
+- configure vscode so it considers the app's modules
+	- right click on folder `./app/weather` > open in integrated terminal
+	_(if your context menu does not display  open in integrated terminal )_
+		- go to settings > search for terminal
+	- install the project: `pnpm install`
+
+### CLI script

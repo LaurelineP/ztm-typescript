@@ -13,3 +13,25 @@ import { strict as assert } from "assert";
 // Useful links:
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function
 // https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Promises
+
+
+const userId = 41;
+async function fetchUserData(userId: number): Promise<{ name: string }> {
+	const response = await fetch(`https://jsonplaceholder.typicode.com/users/${userId}`);
+	const user = await response.json();
+	return user;
+}
+/**  Asynchronous approach: context in which we add a try block */
+(async () => {
+	try {
+		const userFound = fetchUserData(userId);
+		console.log(userFound)
+	} catch (error){
+		console.log( 'User not found')
+	}
+})()    
+
+/** Promise API approach */
+fetchUserData(userId)
+	.then(console.info)
+	.catch(console.error)

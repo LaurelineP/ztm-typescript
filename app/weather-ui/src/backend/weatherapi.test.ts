@@ -1,3 +1,13 @@
+import axios from 'axios';
+import MockAdapter from 'axios-mock-adapter';
+import { WEATHER_API_URL } from './weather/weather.constants';
+import { expect, describe, it, test } from '@jest/globals';
+import { fetchWeatherData } from './weather/weather.api';
+import { strict as assert } from 'assert';
+import { CurrentWeatherAPIResponse, currentWeatherAPIResponseSchema } from './weather/weather.zod';
+import { CurrentWeather } from './weather/weather.model';
+
+
 const SAMPLE_API_RESPONSE = {
   latitude: 36.16438,
   longitude: -115.143936,
@@ -39,3 +49,91 @@ const SAMPLE_API_RESPONSE = {
     ]
   }
 }
+
+
+it('should convert API response', async () => {
+  const httpClient = new MockAdapter(axios);
+  httpClient
+    .onGet(WEATHER_API_URL, {
+      params: {
+        latitude: '0.0',
+        longitude: '0.0',
+        hourly: 'temperature_2m',
+        temperature_unit: "celsius",
+        current_weather: true,
+        forecast_days: 1,
+      }
+    })
+    .reply(200, SAMPLE_API_RESPONSE)
+
+  await fetchWeatherData(axios, WEATHER_API_URL, '0.0', '0.0')
+});
+
+
+it('throws error when response is not 200', async () => {
+  const httpClient = new MockAdapter(axios);
+  httpClient
+    .onGet(WEATHER_API_URL, {
+      params: {
+        latitude: 0.0,
+        longitude: 0.0,
+        hourly: 'temperature_2m',
+        temperature_unit: "celsius",
+        current_weather: true,
+        forecast_days: 1,
+      }
+    })
+    .reply(400, {})
+
+  await expect(fetchWeatherData(
+    axios,
+    WEATHER_API_URL,
+    '0.0',
+    '0.0'
+  )).rejects.toThrow();
+});
+
+it('throws error when API changes', async () => {
+  const httpClient = new MockAdapter(axios);
+  httpClient
+    .onGet(WEATHER_API_URL, {
+      params: {
+        latitude: 0.0,
+        longitude: 0.0,
+        hourly: 'temperature_2m',
+        temperature_unit: "celsius",
+        current_weather: true,
+        forecast_days: 1,
+      }
+    })
+    .reply(200, {})
+
+  await expect(fetchWeatherData(
+    axios,
+    WEATHER_API_URL,
+    '0.0',
+    '0.0'
+  )).rejects.toThrow();
+});
+
+it('gets low temp', () => {
+  const response: CurrentWeatherAPIResponse = currentWeatherAPIResponseSchema.parse(SAMPLE_API_RESPONSE)
+  const currentWeather = new CurrentWeather(response);
+  const lowTemp = currentWeather.getLowTemperature();
+  assert.equal(lowTemp, 23.3);
+});
+
+
+it('gets high temp', () => {
+  const response: CurrentWeatherAPIResponse = currentWeatherAPIResponseSchema.parse(SAMPLE_API_RESPONSE)
+  const currentWeather = new CurrentWeather(response);
+  const highTemp = currentWeather.getHighTemperature();
+  assert.equal(highTemp, 33.5);
+});
+
+it('gets conditions', () => {
+  const response: CurrentWeatherAPIResponse = currentWeatherAPIResponseSchema.parse(SAMPLE_API_RESPONSE)
+  const currentWeather = new CurrentWeather(response);
+  const condition = currentWeather.getConditions();
+  assert.equal(condition, "Clear sky");
+});

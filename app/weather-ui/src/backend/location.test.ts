@@ -1,3 +1,8 @@
+import axios from 'axios';
+import MockAdapter from 'axios-mock-adapter';
+import { fetchLocationData } from './weather/weather.api';
+import { GEOCODE_API_URL } from './weather/weather.constants';
+import { expect, it } from '@jest/globals';
 const SAMPLE_API_RESPONSE = [
   {
     place_id: 287781008,
@@ -28,3 +33,46 @@ const SAMPLE_API_RESPONSE = [
     importance: 0.8181396344174214
   },
 ];
+
+
+it('should convert API response', async () => {
+  const httpClient = new MockAdapter(axios);
+  httpClient
+    .onGet(GEOCODE_API_URL, {
+      params: {
+        q: 'test'
+      }
+    })
+    .reply(200, SAMPLE_API_RESPONSE)
+
+  await fetchLocationData(axios, GEOCODE_API_URL, 'test')
+})
+
+
+it('throws error when response is not 200', async () => {
+  const httpClient = new MockAdapter(axios);
+  httpClient
+    .onGet(GEOCODE_API_URL, {
+      params: {
+        q: 'test'
+      }
+    })
+    .reply(400, SAMPLE_API_RESPONSE)
+
+  await expect(fetchLocationData(axios, GEOCODE_API_URL, 'test'))
+    .rejects.toThrow()
+})
+
+it('throws error when API response changes', async () => {
+  const httpClient = new MockAdapter(axios);
+  httpClient
+    .onGet(GEOCODE_API_URL, {
+      params: {
+        q: 'test'
+      }
+    })
+    .reply(200, {})
+
+  await expect(fetchLocationData(axios, GEOCODE_API_URL, 'test'))
+    .rejects.toThrow()
+})

@@ -18,8 +18,18 @@ async function getUser(): Promise<User> {
       resolve({ id: 1, name: "John" });
     }, time1);
     setTimeout(() => {
-      reject(new Error("failed to located user"));
+      reject(new Error("fail to located user"));
     }, time2);
   });
 }
 
+// ts-ignore
+async function handleGetUserPromise():Promise<any | { id:number, name: string }> {
+  try {
+    const user = await getUser();
+    console.log({ user });
+  } catch ( error ){
+    console.log({ error });
+  }
+}
+handleGetUserPromise()
