@@ -51,4 +51,14 @@ cd demo/ANY_DIR && npx typedoc DEMO_FILE.ts
 		- go to settings > search for terminal
 	- install the project: `pnpm install`
 
-### CLI script
+### CLI script version
+`./app/weather`
+
+### Web app version
+`./app/weather-ui`
+
+## TypeScript Techniques and Patterns
+- discriminated unions: type of various unions accepted during assignment or definition
+- const assert: enables type inferring from type's value
+- generic types: allows to have a wrapper around any type and infer from it   
+( which avoid typing similar functions / classes )

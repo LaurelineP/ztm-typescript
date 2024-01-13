@@ -18,3 +18,36 @@
 // 7. Assert that only "World" remains in the queue
 
 import { strict as assert } from "assert";
+
+class Queue<T> {
+	private readonly items: T[] = [];
+
+	public push(item: T): void {
+		this.items.push(item)
+	}
+
+	public remove(): void {
+		this.items.shift();
+	}
+
+	public hasItem(item: T): boolean {
+		return this.items.includes(item);
+	}
+
+	public getItems(): T[] {
+		return this.items;
+	}
+}
+
+const stringQueue = new Queue<string>();
+
+stringQueue.push('Do');
+stringQueue.push('Build');
+stringQueue.push('Habits');
+stringQueue.remove();
+
+assert(() => stringQueue.hasItem('Build'))
+
+const values = stringQueue.getItems();
+assert(() => values.includes('Build'));
+
