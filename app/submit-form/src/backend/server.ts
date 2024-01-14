@@ -26,7 +26,7 @@ if (COOKIE_SECRET === undefined) {
 
 
 /* ------------------------------ NUNJUCKS SETUP ------------------------------ */
-const template = new nunjucks.Environment(
+const templates = new nunjucks.Environment(
 	// loading templates
 	new nunjucks.FileSystemLoader(path.join(__dirname, 'templates')),
 );
@@ -49,11 +49,29 @@ fastify.register(staticFiles, {
 
 
 /* --------------------------------- routes --------------------------------- */
-// testing routes
+
+const renderResponse = async (response: FastifyReply, render: any): Promise<FastifyReply> => (
+	await response
+		.header('Content-Type', 'text/html;charset=UTF-8')
+		.send(render)
+)
+
 fastify.get('/', async (request, response) => {
-	await response.send('hello');
+	await response.redirect('/signin')
 });
 
+fastify.get('/signup', async (request, response) => {
+	// rendering template signup
+	const render = templates.render('signup.njk', ENVIRONMENT);
+	return await renderResponse(response, render);
+});
+
+
+fastify.get('/signin', async (request, response) => {
+	// rendering template signin
+	const render = templates.render('signin.njk', ENVIRONMENT);
+	return await renderResponse(response, render);
+})
 
 
 
