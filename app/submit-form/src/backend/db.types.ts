@@ -1,12 +1,13 @@
 import { AsyncDatabase } from "promised-sqlite3";
 import { v4 as uuidv4 } from 'uuid';
+import type { HashedPassword } from "./auth";
 
 
 export interface User {
 	id: number;
 	email: string;
 	// Never storing clear text passwords, always hashed
-	hashedPassword: string;
+	hashedPassword: HashedPassword;
 	didAgreeToTerms: boolean;
 }
 

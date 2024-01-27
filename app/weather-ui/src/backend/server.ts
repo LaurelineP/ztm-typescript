@@ -1,7 +1,7 @@
+import path from "node:path"
 import formBody from "@fastify/formbody";
 import staticFiles from "@fastify/static";
 import dotenv from "dotenv";
-import path from "node:path"
 import { fastify } from "fastify";
 import nunjucks from 'nunjucks'
 import { locationSchemaRoute } from "./weather/routes.zod";

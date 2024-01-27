@@ -22,7 +22,8 @@
 		- tests: jest, strictest
 		- build related: bundler parcel
 		- UI: daisyui
-		- unknown so far: livereload
+		- unknown so far: livereload most likely to reload app
+		- zop: schema check
 
 - any existing app need to be installed,
  which generally tend to be from package.json and package-lock.json 
@@ -112,4 +113,72 @@ Tools: `[ path, fastify, dotenv, nunjucks, zod ]`
 
 	- environment variables to load
 
-	- cookies to set ( includes environment variable secret )
+	- defines endpoints
+		- endpoints for the frontend templates ( app pages )
+			- /
+			- /signin
+			- signup
+
+		- endpoints for the API: allowing to do some logic on the action from those pages
+			- /account/signin
+			- /account/signup
+
+
+		- includes some sessions and error handling using cookies
+			## Cookies to set ( includes environment variable secret )
+			Cookie of the session must be set once a user is logged - so anytimes 
+			it makes request it is still recognized by the server and authorized to communicate with it
+			Generally handling session information and such
+
+			### Setting cookies
+			`fastify.setCookie(<NAME_OF_COOKIE>, <VALUE>)`
+
+			## Flash cookie - for error in client side to display:
+			Setting a cookie on the client side that could be read for the next request to come
+			( hence not lost after being redirected )
+			Creating with a middleware ( in here )
+
+			This rely on adding a middleware on the reply to the fastify using *fastify-plugin*
+			each time a response is made it can 
+			- send a FLASH_COOKIE_MSG to the frontend and clear the cookie
+			- so when it get redirected to have the ability to 
+				- read a cookie message 
+				- or also to clear the cookie msg 
+
+				### sending a flash cookie message
+				Defining the helpers dedicated for some functionality we want to use, 
+				we will consume them 
+				- Each time the app redirects because of an error, it is usually where
+				we need to add an error message. 
+					- adds a setFlashCookie before the redirects happen.
+
+
+# Code for frontend
+The frontend is rendering templates using nunjucks
+( template can be provided some dynamism with js injected in it)
+These templates mainly renders 2 pages and both have forms.
+We will be handling the logic regarding the forms 
+( see './src/frontend/fields-error.ts )
+
+## Handling the form validation 
+( see './src/frontend/fields-error.ts )
+Defining a class that will hold our possible errors, will help us 
+defining which error the frontend should display at which field
+
+It will have
+- errors : to collect all the errors
+- set method: to set the error which will do some DOM manipulation
+	- to have a visual error feedback ( style )
+	- to have a hint error message ( error message to display )
+- remove method: to remove the style and error message using DOM manipulation
+- hasNoError: a boolean to ensure there are no errors in the form
+
+## Adjusting frontend to define the login of signin page
+The template signin already import a javascript file ( in js ).
+Our file will be in ts and the server will transpile it to js but
+we need to have the same file name
+- create the signin.ts file ( referring to signin.js once transpiled )
+- defines the errors
+	- for a wrong email pattern: Please provide a valid email
+	- on submit: checking each & both inputs with the error: You must fill this field
+

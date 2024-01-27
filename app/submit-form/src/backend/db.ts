@@ -21,7 +21,7 @@ export class SqliteUserRepository implements UserRepository {
 		const userId: { id: number } = await this.db
 			.get(
 				"INSERT INTO users(email, password, didAgreeToTerms) VALUES(?, ?, ?) RETURNING id",
-				[user.email, user.hashedPassword, user.didAgreeToTerms]
+				[user.email, user.hashedPassword.hashed, user.didAgreeToTerms]
 			);
 		// returns the user with its id updated
 		return {
