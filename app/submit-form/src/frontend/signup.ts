@@ -2,7 +2,6 @@ import { checkEmailRules } from "../shared/email-rules";
 import { checkPasswordRules } from "../shared/password-rules";
 import { FieldErrors } from "./fields-error";
 
-console.log('coucou')
 
 /* --------------------------------- ELEMENTS --------------------------------- */
 
@@ -10,20 +9,25 @@ console.log('coucou')
 const formElements = [
 	document.querySelector('#email'),
 	document.querySelector('#password'),
-	document.querySelector('#form-submit')
+	document.querySelector('#agree-to-terms'),
+	document.querySelector('#form-submit'),
 ];
 
 const fieldErrors = new FieldErrors();
 
 
-const handleChange = (event): void => {
-	const element: HTMLInputElement = event.target;
-	const elementType = element.type;
-	const elementValue = element.value;
+const handleChange = (event: Event): void => {
+	const element: EventTarget | null = event.target as HTMLInputElement;
+	const elementType = (element as HTMLInputElement).type;
+	const elementValue = (element as HTMLInputElement).value;
 
 
 	const handleSubmitButton = (): void => {
 		const button = document.querySelector('#form-submit');
+
+		//  check all fields not empty
+		const allHasValues = formElements.slice(0, 3).every(element => (element as HTMLInputElement).value)
+		console.log('allHasValues:', allHasValues)
 		console.log('fieldErrors.hasNoErrors():', fieldErrors.hasNoErrors())
 		if (fieldErrors.hasNoErrors()) {
 			button?.classList.remove('btn-disabled');
@@ -41,11 +45,11 @@ const handleChange = (event): void => {
 		const hasElementError = elementError !== null;
 
 		if (!isConditionMet && hasElementError) {
-			fieldErrors.set('EmailPattern', element, elementError, 'Email address must use format: name@example.com');
+			fieldErrors.set('EmailPattern', (element as HTMLInputElement), elementError, 'Email address must use format: name@example.com');
 		}
 
 		if (isConditionMet && hasElementError) {
-			fieldErrors.remove('EmailPattern', element, elementError)
+			fieldErrors.remove('EmailPattern', (element as HTMLInputElement), elementError)
 		}
 
 	}
@@ -58,16 +62,30 @@ const handleChange = (event): void => {
 		const isConditionMet = checkPasswordRules(elementValue);
 
 		if (!isConditionMet && hasElementError) {
-			fieldErrors.set('PasswordLength', element, elementError, 'Password must be at least 8 characters.');
+			fieldErrors.set('PasswordLength', (element as HTMLInputElement), elementError, 'Password must be at least 8 characters.');
 		}
 
 		if (isConditionMet && hasElementError) {
-			fieldErrors.remove('PasswordLength', element, elementError)
+			fieldErrors.remove('PasswordLength', (element as HTMLInputElement), elementError)
 		}
 	}
 
 
-	/* ---------------------------- BOTH INPUT CHECKS --------------------------- */
+	/* ---------------------------- TERM REQUIREMENTS --------------------------- */
+	if (elementType === 'checkbox') {
+		const elementError: HTMLInputElement | null = document.querySelector('#invalid-terms-agreement');
+		const hasElementError = elementError !== null;
+		const didAgreeToTerms = (element as HTMLInputElement).checked;
+
+		if (hasElementError) {
+			!didAgreeToTerms
+				? fieldErrors.set('TermsAgreement', (element as HTMLInputElement), elementError, 'You must agree to the terms.')
+				: fieldErrors.remove('TermsAgreement', (element as HTMLInputElement), elementError);
+		}
+	}
+
+
+	/* ---------------------------- ALL INPUTS CHECKS --------------------------- */
 	// Runs every times
 	handleSubmitButton();
 }
@@ -80,6 +98,7 @@ const getHandler = (element): void => {
 		['email', handleChange],
 		['password', handleChange],
 		['submit', handleOnSubmit],
+		['checkbox', handleChange],
 	];
 	elementsDetails.forEach(([type, handler]) => {
 		const event = element.type === 'submit' ? 'click' : 'change';
@@ -91,5 +110,5 @@ const getHandler = (element): void => {
 
 // Assign event dynamically for each element
 formElements.forEach(getHandler);
-
-// const handler;
+const checkbox = document.querySelector('#agree-to-terms')
+if (checkbox !== null) { (checkbox as HTMLInputElement).checked = false; }
