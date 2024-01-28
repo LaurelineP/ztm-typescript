@@ -27,9 +27,7 @@ const handleChange = (event: Event): void => {
 
 		//  check all fields not empty
 		const allHasValues = formElements.slice(0, 3).every(element => (element as HTMLInputElement).value)
-		console.log('allHasValues:', allHasValues)
-		console.log('fieldErrors.hasNoErrors():', fieldErrors.hasNoErrors())
-		if (fieldErrors.hasNoErrors()) {
+		if (fieldErrors.hasNoErrors() && allHasValues) {
 			button?.classList.remove('btn-disabled');
 		} else {
 			button?.classList.add('btn-disabled');

@@ -2,11 +2,8 @@ import { checkEmailRules } from "../shared/email-rules";
 import { checkPasswordRules } from "../shared/password-rules";
 import { FieldErrors } from "./fields-error";
 
-console.log('coucou')
 
 /* --------------------------------- ELEMENTS --------------------------------- */
-
-
 const formElements = [
 	document.querySelector('#email'),
 	document.querySelector('#password'),
@@ -24,8 +21,10 @@ const handleChange = (event): void => {
 
 	const handleSubmitButton = (): void => {
 		const button = document.querySelector('#form-submit');
-		console.log('fieldErrors.hasNoErrors():', fieldErrors.hasNoErrors())
-		if (fieldErrors.hasNoErrors()) {
+		//  check all fields not empty
+		const allHasValues = formElements.slice(0, 2).every(element => (element as HTMLInputElement).value)
+
+		if (fieldErrors.hasNoErrors() && allHasValues) {
 			button?.classList.remove('btn-disabled');
 		} else {
 			button?.classList.add('btn-disabled');

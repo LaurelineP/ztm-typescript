@@ -173,12 +173,40 @@ It will have
 - remove method: to remove the style and error message using DOM manipulation
 - hasNoError: a boolean to ensure there are no errors in the form
 
-## Adjusting frontend to define the login of signin page
+## Adjusting frontend to define the input validations for signup and signin
 The template signin already import a javascript file ( in js ).
 Our file will be in ts and the server will transpile it to js but
 we need to have the same file name
-- create the signin.ts file ( referring to signin.js once transpiled )
+- create the signin.ts / signup.ts file ( referring to signin.js once transpiled )
 - defines the errors
-	- for a wrong email pattern: Please provide a valid email
-	- on submit: checking each & both inputs with the error: You must fill this field
+	- for a wrong email pattern
+	- for a wrong password
+	- for agreements not agreed
+	- on submit: checking each & both inputs with the error with the error you defined
 
+
+
+
+## Backend and flash messages
+Using flash cookies we will provide custom errors on the actions taken by the user.
+Note - templates includes a specific placeholder for server's error template from 
+`server_message.njk` which is just a paragraph element to display the error message
+that will be handled by the flash cookie through the variable to pass the template
+`server_msg`
+
+- user does not exist
+- wrong credentials
+- etc...
+
+### Todos:
+- for each frontend endpoint ( /signin, /signup ) read the flash cookie message and pass
+it to the template
+( remember: the flash message are already handle - we are just plugging them to the frontend pages serverd )
+
+
+## Backend and input validations 
+Despite having it checked in the frontend, we need to also double check them in the backend
+( hence the shared folder for both BE and FE )
+
+For each endpoint ( /account/signin, /account/signup ) - check the inputs before continuing to
+the logic of signin and signup

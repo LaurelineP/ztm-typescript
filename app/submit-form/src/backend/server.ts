@@ -7,8 +7,10 @@ import Fastify from 'fastify';
 import nunjucks from 'nunjucks';
 import { z } from 'zod';
 
+import { checkEmailRules } from "../shared/email-rules";
+import { checkPasswordRules } from "../shared/password-rules";
 import { hashPassword, comparePassword } from "./auth";
-import { clearFlashCookie, setFlashCookie, setSessionCookie } from "./cookies.helpers";
+import { clearFlashCookie, readFlashCookie, setFlashCookie, setSessionCookie } from "./cookies.helpers";
 import { connect, newDatabase, SqliteUserRepository, SqliteSessionRepository } from './db'
 
 import { accountCreateRequestSchema, accountLoginRequestSchema } from "./schemas.zod";
@@ -89,28 +91,43 @@ fastify.get('/', async (_request, response) => {
 /*                                   SIGNUP                                   */
 /* -------------------------------------------------------------------------- */
 // FE - rendering the signup page 
-fastify.get('/signup', async (_request: FastifyRequest, response: FastifyReply) => {
+fastify.get('/signup', async (request: FastifyRequest, response: FastifyReply) => {
 	// rendering template signup
-
-	const render = templates.render('signup.njk', ENVIRONMENT);
+	const serverMessage = readFlashCookie(request);
+	const render = templates.render('signup.njk',
+		{
+			environment: ENVIRONMENT,
+			server_msg: serverMessage
+		});
 	return await renderResponse(response, render);
 });
 
 // BE - handling the signup form
 fastify.post('/account/signup', async (request: FastifyRequest, response: FastifyReply) => {
-	console.log('🔥 COUCOU 1 - /account/signup', request.body)
 
 	let requestData: AccountCreateRequest;
+
+
 	try {
 		requestData = accountCreateRequestSchema.parse(request.body);
 		// TODO: hash password
 		const hashedPassword = await hashPassword(requestData.password);
+
+
+		const hasNoEmailFailure = checkEmailRules(requestData.email);
+		const hasNoPasswordFailure = checkPasswordRules(requestData.password);
+		if (!hasNoPasswordFailure || !hasNoEmailFailure) {
+			setFlashCookie(response, 'Invalid credentials format');
+			return await response.redirect('/signup');
+		}
 
 		// 
 		if (requestData.didAgreeToTerms !== 'on') {
 			setFlashCookie(response, 'You must agree to the terms');
 			response.redirect('/signup');
 		}
+
+
 
 		/* ------------------------------ CREATE A USER ----------------------------- */
 		const newUser: UserType = {
@@ -152,12 +169,17 @@ fastify.post('/account/signup', async (request: FastifyRequest, response: Fastif
 // FE - rendering the signin page
 fastify.get('/signin', async (request, response) => {
 	// rendering template signin
-	const render = templates.render('signin.njk', ENVIRONMENT);
+	const serverMessage = readFlashCookie(request);
+	const render = templates.render('signin.njk',
+		{
+			environment: ENVIRONMENT,
+			server_msg: serverMessage
+		}
+	);
 	return await renderResponse(response, render);
 })
 
 fastify.post('/account/signin', async (request: FastifyRequest, response: FastifyReply) => {
-	console.log('🔥 COUCOU 1 - /account/signin', request.body)
 
 	let requestData: AccountLoginRequest;
 	try {
