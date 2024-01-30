@@ -17,10 +17,13 @@ export class SqliteUserRepository implements UserRepository {
 	constructor(private readonly db: AsyncDatabase) {
 	}
 
+	async get(userId: number): Promise<User | undefined> {
+		return await this.db.get('SELECT * FROM users WHERE id = ?', userId);
+	};
+
 	async create(user: User): Promise<User> {
 		const userId: { id: number } = await this.db
-			.get(
-				"INSERT INTO users(email, password, didAgreeToTerms) VALUES(?, ?, ?) RETURNING id",
+			.get('INSERT INTO users(email, hashedPassword, didAgreeToTerms) VALUES(?, ?, ?) RETURNING id',
 				[user.email, user.hashedPassword.hashed, user.didAgreeToTerms]
 			);
 		// returns the user with its id updated
@@ -34,9 +37,7 @@ export class SqliteUserRepository implements UserRepository {
 		return await this.db.get('SELECT * FROM users WHERE email = ?', email);
 	};
 
-	async get(userId: number): Promise<User | undefined> {
-		return await this.db.get('SELECT * FROM users WHERE id = ?', userId);
-	};
+
 }
 
 
@@ -46,9 +47,12 @@ export class SqliteUserRepository implements UserRepository {
 
 export class SqliteSessionRepository implements SessionRepository {
 	constructor(private readonly db: AsyncDatabase) { }
+
 	async create(userId: number): Promise<string> {
+		console.log('GOSHHHHH ❌')
 		const sessionId = uuidv4();
-		await this.db.run('INSERT INTO sessions(session_id, user_id) VALUES(?,?)', [sessionId, userId]);
+		await this.db.run('INSERT INTO sessions(session_id, user_id) VALUES(?,?)', [sessionId, userId])
+			.catch(e => { throw { message: 'Error while creating session', error: e } });
 		return sessionId;
 	};
 
@@ -58,6 +62,7 @@ export class SqliteSessionRepository implements SessionRepository {
 			sessionId
 		);
 
+		console.log('GET sessionUserId:', sessionUserId)
 		if (sessionUserId === undefined) return;
 
 		// Instantiate the user table
@@ -81,10 +86,10 @@ export async function newDatabase(db: AsyncDatabase): Promise<void> {
 			id INTEGER PRIMARY KEY,
 			email TEXT UNIQUE,
 			hashedPassword TEXT NOT NULL,
-			didAgreeToTerms BOOLEAN
+			didAgreeToTerms BOOLEAN NOT NULL
 		);
 		CREATE TABLE IF NOT EXISTS sessions (
-			session_id INTEGER PRIMARY KEY,
+			session_id UUID PRIMARY KEY,
 			user_id INTEGER NOT NULL,
 			FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 		);

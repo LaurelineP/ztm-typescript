@@ -74,6 +74,7 @@ const handleChange = (event: Event): void => {
 		const elementError: HTMLInputElement | null = document.querySelector('#invalid-terms-agreement');
 		const hasElementError = elementError !== null;
 		const didAgreeToTerms = (element as HTMLInputElement).checked;
+		console.log('didAgreeToTerms:', didAgreeToTerms)
 
 		if (hasElementError) {
 			!didAgreeToTerms
@@ -95,8 +96,8 @@ const getHandler = (element): void => {
 	const elementsDetails = [
 		['email', handleChange],
 		['password', handleChange],
-		['submit', handleOnSubmit],
 		['checkbox', handleChange],
+		['submit', handleOnSubmit],
 	];
 	elementsDetails.forEach(([type, handler]) => {
 		const event = element.type === 'submit' ? 'click' : 'change';
@@ -108,5 +109,3 @@ const getHandler = (element): void => {
 
 // Assign event dynamically for each element
 formElements.forEach(getHandler);
-const checkbox = document.querySelector('#agree-to-terms')
-if (checkbox !== null) { (checkbox as HTMLInputElement).checked = false; }

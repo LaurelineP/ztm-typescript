@@ -1,28 +1,20 @@
-import { AsyncDatabase } from "promised-sqlite3";
-import { v4 as uuidv4 } from 'uuid';
+
 import type { HashedPassword } from "./auth";
 
 
 export interface User {
 	id: number;
 	email: string;
-	// Never storing clear text passwords, always hashed
 	hashedPassword: HashedPassword;
 	didAgreeToTerms: boolean;
 }
 
-// export interface UserSession {
-// 	id: number;
-// 	userId: number;
-// 	user: User;
-// }
+export interface Session {
+	id: number;
+	userId: number;
+	sessionId: string;
+}
 
-// Repository are entity to query the database
-/**
- * Repository pattern
- * 	- allowing to change data from database
- *  - allowing to test databases ( even different DBMS )
- */
 export interface UserRepository {
 	// create a user
 	create(user: User): Promise<User>;
